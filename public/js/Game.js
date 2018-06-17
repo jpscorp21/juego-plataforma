@@ -1,15 +1,16 @@
+//ecmascript5
 var config = {
-    type: Phaser.CANVAS,
-    width: 800,
-    height: 600,
-    physics: {
-        default: 'arcade',
+    type: Phaser.CANVAS, // phaser es el framework,canvas el motor de renderizado
+    width: 800, //ancho
+    height: 600, //altura
+    physics: { // fisica del juego
+        default: 'arcade', // fisica del juego
         arcade: {
-            gravity: {y: 500},
+            gravity: { y: 500 }, //gravedad del jugador
             debug: false
         }
     },
-    scene: {
+    scene: { // todo lo que ocupa el juego
         key: 'main',
         preload: preload,
         create: create,
@@ -17,12 +18,13 @@ var config = {
     }
 };
 
+//definir las variables del juego
 var game = new Phaser.Game(config);
 
 var map;
 var player;
 var cursors;
-var groundLayer, coinLayer;
+var groundLayer, coinLayer; // capas de la moneda
 var text;
 var score = 0;
 
@@ -30,7 +32,7 @@ function preload() {
     // map made with Tiled in JSON format
     this.load.tilemapTiledJSON('map', './assets/mario-style/map.json');
     // tiles in spritesheet 
-    this.load.spritesheet('tiles', './assets/mario-style/tiles.png', {frameWidth: 70, frameHeight: 70});
+    this.load.spritesheet('tiles', './assets/mario-style/tiles.png', { frameWidth: 70, frameHeight: 70 });
     // simple coin image
     this.load.image('coin', './assets/mario-style/coinGold.png');
     // player animations
@@ -39,7 +41,7 @@ function preload() {
 
 function create() {
     // load the map 
-    map = this.make.tilemap({key: 'map'});
+    map = this.make.tilemap({ key: 'map' });
 
     // tiles for the ground layer
     var groundTiles = map.addTilesetImage('tiles');
@@ -61,10 +63,10 @@ function create() {
     player = this.physics.add.sprite(200, 200, 'player');
     player.setBounce(0.2); // our player will bounce from items
     player.setCollideWorldBounds(true); // don't go out of the map    
-    
+
     // small fix to our player images, we resize the physics body object slightly
-    player.body.setSize(player.width, player.height-8);
-    
+    player.body.setSize(player.width, player.height - 8);
+
     // player will collide with the level tiles 
     this.physics.add.collider(groundLayer, player);
 
@@ -76,14 +78,14 @@ function create() {
     // player walk animation
     this.anims.create({
         key: 'walk',
-        frames: this.anims.generateFrameNames('player', {prefix: 'p1_walk', start: 1, end: 11, zeroPad: 2}),
+        frames: this.anims.generateFrameNames('player', { prefix: 'p1_walk', start: 1, end: 11, zeroPad: 2 }),
         frameRate: 10,
         repeat: -1
     });
     // idle with only one frame, so repeat is not neaded
     this.anims.create({
         key: 'idle',
-        frames: [{key: 'player', frame: 'p1_stand'}],
+        frames: [{ key: 'player', frame: 'p1_stand' }],
         frameRate: 10,
     });
 
@@ -116,14 +118,11 @@ function collectCoin(sprite, tile) {
 }
 
 function update(time, delta) {
-    if (cursors.left.isDown)
-    {
+    if (cursors.left.isDown) {
         player.body.setVelocityX(-200);
         player.anims.play('walk', true); // walk left
         player.flipX = true; // flip the sprite to the left
-    }
-    else if (cursors.right.isDown)
-    {
+    } else if (cursors.right.isDown) {
         player.body.setVelocityX(200);
         player.anims.play('walk', true);
         player.flipX = false; // use the original sprite looking to the right
@@ -132,8 +131,7 @@ function update(time, delta) {
         player.anims.play('idle', true);
     }
     // jump 
-    if (cursors.up.isDown && player.body.onFloor())
-    {
-        player.body.setVelocityY(-500);        
+    if (cursors.up.isDown && player.body.onFloor()) {
+        player.body.setVelocityY(-500);
     }
 }
