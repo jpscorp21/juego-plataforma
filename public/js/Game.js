@@ -24,17 +24,20 @@ var game = new Phaser.Game(config);
 var map;
 var player;
 var cursors;
-var groundLayer, coinLayer; // capas de la moneda
+var groundLayer, coinLayer, trampaLayer; // capas de la moneda
+var fondoLayer;
 var text;
 var score = 0;
 
 function preload() {
     // map made with Tiled in JSON format
-    this.load.tilemapTiledJSON('map', './assets/mario-style/map.json');
+    this.load.tilemapTiledJSON('map', './assets/plataforma-example1/map.json');
     // tiles in spritesheet 
-    this.load.spritesheet('tiles', './assets/mario-style/tiles.png', { frameWidth: 70, frameHeight: 70 });
+    this.load.spritesheet('tiles', './assets/plataforma-example1/grass.png', { frameWidth: 70, frameHeight: 70 });
+    this.load.spritesheet('tiles2', './assets/plataforma-example1/tiles2.png', { frameWidth: 70, frameHeight: 70 });
+    this.load.spritesheet('items', './assets/plataforma-example1/items.png', { frameWidth: 70, frameHeight: 70 });
     // simple coin image
-    this.load.image('coin', './assets/mario-style/coinGold.png');
+    //this.load.image('coin', './assets/mario-style/coinGold.png');
     // player animations
     this.load.atlas('player', './assets/mario-style/player.png', './assets/mario-style/player.json');
 }
@@ -44,16 +47,25 @@ function create() {
     map = this.make.tilemap({ key: 'map' });
 
     // tiles for the ground layer
-    var groundTiles = map.addTilesetImage('tiles');
+    var groundTiles = map.addTilesetImage('tiles');    
     // create the ground layer
-    groundLayer = map.createDynamicLayer('World', groundTiles, 0, 0);
+    groundLayer = map.createDynamicLayer('world', groundTiles, 0, 0);
+    
     // the player will collide with this layer
     groundLayer.setCollisionByExclusion([-1]);
 
+
+    var groundTiles2 = map.addTilesetImage('tiles2');
+    fondoLayer = map.createDynamicLayer('fondo', groundTiles2, 0, 0);
+    
+    
+    var itemsTiles = map.addTilesetImage('items');
+    trampaLayer = map.createDynamicLayer('trampa', itemsTiles, 0, 0);
+    trampaLayer.setCollisionByExclusion([-1]);
     // coin image used as tileset
-    var coinTiles = map.addTilesetImage('coin');
+    /*var coinTiles = map.addTilesetImage('coin');
     // add coins as tiles
-    coinLayer = map.createDynamicLayer('Coins', coinTiles, 0, 0);
+    coinLayer = map.createDynamicLayer('Coins', coinTiles, 0, 0);*/
 
     // set the boundaries of our game world
     this.physics.world.bounds.width = groundLayer.width;
@@ -69,11 +81,14 @@ function create() {
 
     // player will collide with the level tiles 
     this.physics.add.collider(groundLayer, player);
+    this.physics.add.collider(trampaLayer, player);
 
-    coinLayer.setTileIndexCallback(17, collectCoin, this);
+
+    trampaLayer.setTileIndexCallback(17, touchTrampa, this);
+    //coinLayer.setTileIndexCallback(17, collectCoin, this);
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
-    this.physics.add.overlap(player, coinLayer);
+    //this.physics.add.overlap(player, coinLayer);
 
     // player walk animation
     this.anims.create({
@@ -110,11 +125,16 @@ function create() {
 }
 
 // this function will be called when the player touches a coin
-function collectCoin(sprite, tile) {
+/*function collectCoin(sprite, tile) {
     coinLayer.removeTileAt(tile.x, tile.y); // remove the tile/coin
     score++; // add 10 points to the score
     text.setText(score); // set the text to show the current score
     return false;
+}*/
+
+function touchTrampa(sprite, tile) {
+    
+    alert('me tocaste');
 }
 
 function update(time, delta) {
