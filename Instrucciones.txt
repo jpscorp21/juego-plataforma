@@ -1,0 +1,8 @@
+Como ejecutar el juego
+
+1- Copiar todo el contenido en el disco duro
+2- Instalar nodejs que esta en la carpeta programas
+3- Una vez instalado,  desde la terminal de windows dirigirse a la raiz del proyecto
+4- Teniendo internet, escribir el comando "npm install" sin las comillas.
+5- Luego una vez que vea que instalo todas las dependencias, entonces ejecutar el comando "npm start"
+6- Abrir el navegador y escribir "localhost:3000" para ejecutar el juego

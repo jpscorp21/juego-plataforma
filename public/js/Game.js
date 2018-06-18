@@ -6,7 +6,7 @@ var player;
 var cursors;
 var groundLayer, coinLayer; // capas de la moneda
 var fondoLayer;
-var text;
+var text, text2;
 var score = 0;
 
 function preload() {
@@ -99,20 +99,27 @@ function create() {
   this.cameras.main.setBackgroundColor("#ccccff");
 
   // this text will show the score
-  text = this.add.text(20, 570, "0", {
+  text = this.add.text(20, 20, "Puntaje: 0", {
     fontSize: "20px",
     fill: "#ffffff"
   });
+
+  text2 = this.add.text(240, 280, "Has ganado", {
+    fontSize: "60px",
+    fill: "#ffffff"    
+  });
   // fix the text to the cameras
   text.setScrollFactor(0);
+  text2.setScrollFactor(0);
+  text2.setVisible(false);
 }
 
 // this function will be called when the player touches a coin
 function collectCoin(sprite, tile) {
         coinLayer.removeTileAt(tile.x, tile.y); // remove the tile/coin
         score++; // add 10 points to the score
-        text.setText(score); // set the text to show the current score
-        if (score == 10) {
+        text.setText(`Puntaje: ${score}`); // set the text to show the current score
+        if (score == 60) {
             endGame();
         } 
         return false;
@@ -138,7 +145,7 @@ function update(time, delta) {
 }
 
 function endGame(sprite, tile) {      
-  //Phaser.scene.start('main');
+  text2.setVisible(true);
 }
 
 //ecmascript5
