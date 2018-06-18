@@ -1,4 +1,10 @@
-Como ejecutar el juego
+Como ejecutar el juego 
+
+//Web
+
+1- Ingresar en la pagina https://platform-phaser.herokuapp.com/
+
+//Localmente
 
 1- Copiar todo el contenido en el disco duro
 2- Instalar nodejs que esta en la carpeta programas
